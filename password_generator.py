@@ -3,18 +3,18 @@ import string
 import random
 from tkinter import messagebox
 
-#Create the GUI window
+# Create the GUI window
 root = Tk()
-root.geometry("550x550")
-root.title("Password_generator")
+root.geometry("600x600")
+root.title("Password Generator")
 
-#function for generating the password
+# Function for generating the password
 def onclick():
-    if(entry.get()==""):
+    if entry.get() == "":
         messagebox.showwarning("Warning", "Please enter the length of the password")
         return
-    len = int(entry.get())
-    if(len<=0):
+    length = int(entry.get())
+    if length <= 0:
         lb1.config(text="Invalid length")
         return
     s1 = string.ascii_letters
@@ -24,26 +24,46 @@ def onclick():
     s.extend(list(s1))
     s.extend(list(s2))
     s.extend(list(s3))
-    password = "".join(random.sample(s,len))
-    lb1.config(text="Generated password")
+    password = "".join(random.sample(s, length))
+    lb1.config(text="Generated Password:")
     lb2.config(text=password)
 
-label = Label(root,text = "Password Generator",bg="yellow",fg="black",height=2,width=30,font="lucida 10 bold").place(x=155,y=10)
+# Function to copy password to clipboard
+def copy_to_clipboard():
+    password = lb2.cget("text")  # Get the generated password
+    if password:  # Check if there is a password to copy
+        root.clipboard_clear()  # Clear the clipboard
+        root.clipboard_append(password)  # Append the password to the clipboard
+        messagebox.showinfo("Info", "Password copied to clipboard!")  # Notify user
+    else:
+        messagebox.showwarning("Warning", "No password to copy!")
 
-label = Label(root,text = "Enter the length of the password",fg="black",height=2,width=30,font="lucida 10 bold").place(x=155,y=50)
+# Create UI elements
+header_label = Label(root, text="Password Generator", bg="yellow", fg="black", height=2, width=30, font="lucida 14 bold")
+header_label.pack(pady=10)
 
-#entry widget for specifying the length of the password
-entry = Entry(root)
-entry.pack(fill=X,ipadx=2,pady=90,padx=150)
+instruction_label = Label(root, text="Enter the length of the password:", fg="black", height=2, width=30, font="lucida 12 bold")
+instruction_label.pack(pady=10)
 
-#button for generate password
-button = Button(root,text="Generate password",command=onclick)
-button.place(x=215,y=120)
+# Entry widget for specifying the length of the password
+entry = Entry(root, font="lucida 12")
+entry.pack(fill=X, ipadx=2, pady=10, padx=150)
 
+# Button for generating password
+button = Button(root, text="Generate Password", command=onclick, font="lucida 12 bold")
+button.pack(pady=10)
 
-lb1 = Label(root,text = "",fg="black",height=2,width=30,font="lucida 10 bold")
-lb1.place(x=155,y=150)
-#label for displaying the generated password
-lb2 = Label(root,width=25,height=1,text="",font="Helvetica 40 bold")
-lb2.pack()
+# Label to indicate generated password
+lb1 = Label(root, text="", fg="black", height=2, width=30, font="lucida 12 bold")
+lb1.pack(pady=10)
+
+# Label for displaying the generated password
+lb2 = Label(root, width=40, height=2, text="", font="Helvetica 24 bold")
+lb2.pack(pady=20)
+
+# Button to copy password to clipboard
+copy_button = Button(root, text="Copy to Clipboard", command=copy_to_clipboard, font="lucida 12 bold")
+copy_button.pack(pady=10)
+
+# Run the GUI application
 root.mainloop()
